@@ -3,11 +3,12 @@ import { BiShow } from "react-icons/bi";
 import { GrHide } from "react-icons/gr";
 const PaswordInput = ({
   name,
-  value,
-  onChange,
   placeholder = "",
   className = "",
   inputClass = "",
+  autoComplete,
+  errorName,
+  errorMessage,
   ...rest
 }) => {
   const [showpassword, setshowPassword] = useState(false);
@@ -19,12 +20,10 @@ const PaswordInput = ({
       <div className="w-full relative">
         <input
           id={name}
+          autoComplete={autoComplete}
           name={name}
           type={showpassword ? "text" : "password"}
-          value={value}
-          onChange={onChange}
           placeholder={placeholder}
-          required
           className={`border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 ${inputClass}`}
           {...rest}
         />{" "}
@@ -34,6 +33,7 @@ const PaswordInput = ({
         >
           {showpassword ? <GrHide /> : <BiShow />}
         </span>
+        {errorName && <p style={{ color: "red" }}>{errorMessage}</p>}
       </div>
     </div>
   );

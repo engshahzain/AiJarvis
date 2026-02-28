@@ -4,6 +4,8 @@ import RequiredInput from "../Common/RequiredInput";
 import PaswordInput from "../Common/PaswordInput";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import axios from "axios";
+import toast from "react-hot-toast";
 const SignupPage = () => {
   const {
     register,
@@ -11,8 +13,27 @@ const SignupPage = () => {
     watch,
     formState: { errors },
   } = useForm();
-  const onsubmit = (data) => {
-    console.log(data);
+  const [loading, setloading] = useState(false);
+  const onsubmit = async (data) => {
+    setloading(true);
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/Auth/register",
+        data,
+      );
+      if (!res.data.success) {
+        setloading(false);
+        return toast.error(res.data.message);
+      }
+      setloading(false);
+      return toast.success(res.data.message);
+    } catch (error) {
+      toast.error(error.response.data.message);
+      setloading(false);
+      console.log(
+        error.response.data.message + "on Submit Data in Signup Page",
+      );
+    }
   };
   const password = watch("password");
   return (
@@ -30,6 +51,7 @@ const SignupPage = () => {
         <h1 className="text-white font-bold text-4xl mb-7">Signup</h1>
         <RequiredInput
           name={"Name"}
+          autoComplete="off"
           className="text-white"
           inputClass="text-black"
           {...register("name", {
@@ -43,6 +65,7 @@ const SignupPage = () => {
           name={"Email"}
           className="text-white"
           inputClass="text-black"
+          autoComplete="off"
           type="email"
           {...register("email", {
             required: "Email is required",
@@ -57,6 +80,7 @@ const SignupPage = () => {
 
         <RequiredInput
           name={"Password"}
+          autoComplete="off"
           className="text-white"
           inputClass="text-black"
           type="password"
@@ -73,6 +97,7 @@ const SignupPage = () => {
 
         <RequiredInput
           name={"ConfirmPassword"}
+          autoComplete="off"
           className="text-white"
           inputClass="text-black"
           type="password"
@@ -94,7 +119,7 @@ const SignupPage = () => {
           type="submit"
           className="bg-white text-black font-semibold text-sm rounded px-8 transition-all duration-150 py-3 hover:bg-gray-300 mt-3"
         >
-          Submit
+          {loading ? "Please wait ..." : "Submit"}
         </button>
         <p className="text-white mt-2">
           Already have an account ?{" "}

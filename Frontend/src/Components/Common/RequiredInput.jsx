@@ -7,19 +7,21 @@ const RequiredInput = ({
   placeholder = "",
   className = "",
   inputClass = "",
+  autoComplete,
   errorName,
   errorMessage,
   ...rest
 }) => {
   return (
     <div className={`flex gap-2 flex-col mb-4 ${className}`}>
-      <label htmlFor={name} className="mb-1 font-semibold ">
+      <label htmlFor={name} className="mb-1 font-semibold capitalize">
         {name} <span className="text-red-500">*</span>
       </label>
       <input
         id={name}
         name={name}
         type={type}
+        autoComplete={autoComplete}
         placeholder={placeholder}
         className={`border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${inputClass}`}
         {...rest}

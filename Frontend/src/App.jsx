@@ -4,9 +4,11 @@ import HomePage from "./Components/Pages/HomePage";
 import SignupPage from "./Components/Pages/SignupPage";
 import LoginPage from "./Components/Pages/LoginPage";
 import "./App.css";
+import { Toaster } from "react-hot-toast";
 const App = () => {
   return (
     <div>
+      <Toaster />
       <Router>
         <Routes>
           <Route path="/" element={<HomePage />} />
