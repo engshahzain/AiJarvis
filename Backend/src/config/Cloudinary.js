@@ -1,4 +1,5 @@
 const { v2 } = require("cloudinary");
+const fs = require("fs");
 const uploadonCloudinary = async (filepath) => {
   v2.config({
     cloud_name: "dfqfl4scd",
@@ -6,12 +7,15 @@ const uploadonCloudinary = async (filepath) => {
     api_secret: "h5cdBxdZC-loKI9LmNCSjNrDL8w",
   });
   try {
-    const uploadResult = await v2.uploader.upload(filepath).catch((error) => {
-      console.log(error);
-    });
-    console.log(uploadResult); // Optimize delivery by resizing and applying auto-format and auto-quality
+    const uploadResult = await v2.uploader.upload(filepath);
+    return uploadResult.secure_url;
+    fs.unlinkSync(filepath);
   } catch (error) {
     console.log(error);
+    fs.unlinkSync(filepath);
+    return resizeBy
+      .status(500)
+      .send({ message: "error on Cloudinary file", success: false });
   }
 
   //   const optimizeUrl = v2.url("shoes", {
@@ -31,3 +35,5 @@ const uploadonCloudinary = async (filepath) => {
 
   //   console.log(autoCropUrl);
 };
+
+module.exports = uploadonCloudinary;

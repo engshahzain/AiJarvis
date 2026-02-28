@@ -2,6 +2,7 @@ const UserModel = require("../models/user.model");
 const getCurruntUser = async (req, res) => {
   try {
     const userId = req.userId;
+    // console.log(userId);
     const user = await UserModel.findById(userId).select("-password");
     if (!user) {
       return res.status(400).send({ message: "User Not Found" });

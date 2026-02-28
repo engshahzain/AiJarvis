@@ -20,6 +20,9 @@ const LoginPage = () => {
       const res = await axios.post(
         "http://localhost:5000/api/Auth/login",
         data,
+        {
+          withCredentials: true,
+        },
       );
       if (!res.data.success) {
         return toast.error(res.data.message);

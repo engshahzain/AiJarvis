@@ -9,7 +9,7 @@ const authCheck = async (req, res, next) => {
         .status(401)
         .send({ message: "Please Login First", success: false });
     const decode = await jwt.verify(token, process.env.SECRETKEY);
-    req.userId = decode._id;
+    req.userId = decode.userID;
     next();
   } catch (error) {
     console.log(error + "Error on auth check middleware");
@@ -19,4 +19,4 @@ const authCheck = async (req, res, next) => {
   }
 };
 
-module.export = { authCheck };
+module.exports = authCheck;
