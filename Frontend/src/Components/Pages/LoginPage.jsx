@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import authBG from "../../assets/authBg.png";
 import RequiredInput from "../Common/RequiredInput";
 import PaswordInput from "../Common/PaswordInput";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { UserdataContext } from "../../context/UserContext";
 const LoginPage = () => {
   const [loading, setloading] = useState(false);
+  const { userData, setUserData } = useContext(UserdataContext);
+  const Navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -16,6 +19,7 @@ const LoginPage = () => {
   } = useForm();
   const onsubmit = async (data) => {
     setloading(true);
+    // console.log(userData);
     try {
       const res = await axios.post(
         "http://localhost:5000/api/Auth/login",
@@ -25,13 +29,17 @@ const LoginPage = () => {
         },
       );
       if (!res.data.success) {
-        return toast.error(res.data.message);
         setloading(false);
+        setUserData(null);
+        return toast.error(res.data.message);
       }
-      return toast.success(res.data.message);
       setloading(false);
+      setUserData(res.data.user);
+      Navigate("/customize");
+      return toast.success(res.data.message);
     } catch (error) {
       toast.error(error.response.data.message);
+      setUserData(null);
       setloading(false);
       console.log(
         error.response.data.message + "on Submit Data in Signup Page",

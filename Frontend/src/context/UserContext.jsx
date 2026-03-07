@@ -5,7 +5,8 @@ export const UserdataContext = createContext(null);
 
 const UserContext = ({ children }) => {
   const [userData, setUserData] = useState(null);
-
+  const [selectImg, setSelectImg] = useState(null);
+  const [selectBackendImg, setSelectBackendImg] = useState(null);
   const handleCurrentUser = async () => {
     try {
       const res = await axios.get(
@@ -31,6 +32,10 @@ const UserContext = ({ children }) => {
   const value = {
     userData,
     setUserData,
+    selectImg,
+    setSelectImg,
+    selectBackendImg,
+    setSelectBackendImg,
   };
 
   return (

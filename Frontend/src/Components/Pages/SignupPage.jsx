@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import authBG from "../../assets/authBg.png";
 import RequiredInput from "../Common/RequiredInput";
 import PaswordInput from "../Common/PaswordInput";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { UserdataContext } from "../../context/UserContext";
 const SignupPage = () => {
+  const { userData, setUserData } = useContext(UserdataContext);
+  const Navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -23,11 +26,15 @@ const SignupPage = () => {
       );
       if (!res.data.success) {
         setloading(false);
+        setUserData(null);
         return toast.error(res.data.message);
       }
       setloading(false);
+      setUserData(res.data.user);
+      Navigate("/customize");
       return toast.success(res.data.message);
     } catch (error) {
+      setUserData(null);
       toast.error(error.response.data.message);
       setloading(false);
       console.log(
