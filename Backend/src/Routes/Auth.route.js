@@ -6,6 +6,6 @@ router.post("/register", Register);
 // http://localhost:5000/api/Auth/login"
 router.post("/login", Login);
 // http://localhost:5000/api/Auth/logout"
-router.post("/logout", Logout);
+router.get("/logout", Logout);
 
 module.exports = router;

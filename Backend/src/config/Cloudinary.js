@@ -8,14 +8,12 @@ const uploadonCloudinary = async (filepath) => {
   });
   try {
     const uploadResult = await v2.uploader.upload(filepath);
+    fs.unlinkSync(filepath);
     return uploadResult.secure_url;
-    fs.unlinkSync(filepath);
   } catch (error) {
-    console.log(error);
+    console.log("Cloudinary Error:", error);
     fs.unlinkSync(filepath);
-    return resizeBy
-      .status(500)
-      .send({ message: "error on Cloudinary file", success: false });
+    throw error;
   }
 
   //   const optimizeUrl = v2.url("shoes", {

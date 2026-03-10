@@ -1,3 +1,4 @@
+const uploadonCloudinary = require("../config/Cloudinary");
 const UserModel = require("../models/user.model");
 const getCurruntUser = async (req, res) => {
   try {
@@ -15,4 +16,31 @@ const getCurruntUser = async (req, res) => {
   }
 };
 
-module.exports = getCurruntUser;
+const updateAssistant = async (req, res) => {
+  try {
+    const { assistantName, imgUrl } = req.body;
+    let assistantImage;
+    if (req.file) {
+      assistantImage = await uploadonCloudinary(req.file.path);
+    } else {
+      assistantImage = imgUrl;
+    }
+    const user = await UserModel.findByIdAndUpdate(
+      req.userId,
+      {
+        assistantName,
+        assistantImg: assistantImage,
+      },
+      { new: true },
+    ).select("-password");
+
+    res.status(200).send({
+      success: true,
+      message: "Assisstant update sucessfully",
+      user: user,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+module.exports = { getCurruntUser, updateAssistant };
