@@ -38,6 +38,7 @@ const CustomizePage2 = () => {
       console.log("Result Customize page 2:", result.data);
 
       setUserData(result.data.user);
+      Navigate("/");
       setloader(false);
     } catch (error) {
       console.log("error", error);

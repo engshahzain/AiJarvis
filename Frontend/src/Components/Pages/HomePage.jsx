@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { UserdataContext } from "../../context/UserContext";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -18,6 +18,24 @@ const HomePage = () => {
       console.log(error);
     }
   };
+  useEffect(() => {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.lang = "en-US";
+    recognition.onresult = (e) => {
+      console.log(e);
+      const transcript = e.results[e.results.length - 1][0].transcript.trim();
+      console.log("transcript" + transcript);
+      if (
+        transcript.toLowerCase().includes(userData.assistantName.toLowerCase())
+      ) {
+      }
+    };
+    // console.log(userData);
+    recognition.start();
+  }, []);
   return (
     <div className=" w-full flex flex-col h-screen  relative py-10 bg-gradient-to-t from-black to-blue-900">
       <Link
