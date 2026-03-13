@@ -15,7 +15,7 @@ const UserContext = ({ children }) => {
     try {
       const res = await axios.get(
         "http://localhost:5000/api/user/currunt-user",
-        { withCredentials: true },
+        { withCredentials: true }
       );
 
       setUserData(res.data.user || null);
@@ -23,7 +23,7 @@ const UserContext = ({ children }) => {
     } catch (error) {
       console.log(
         "Error on user context:",
-        error.response?.data || error.message,
+        error.response?.data || error.message
       );
       setUserData(null);
     } finally {
@@ -35,6 +35,20 @@ const UserContext = ({ children }) => {
     handleCurrentUser();
   }, []);
 
+  const GemnaiResponse = async (command) => {
+    try {
+      const result = await axios.post(
+        "http://localhost:5000/api/user/ask-to-assistant",
+        { command }, // ✅ FIX
+        { withCredentials: true }
+      );
+
+      return result.data;
+    } catch (error) {
+      console.log(error.response?.data || error.message, "Error on assistant");
+    }
+  };
+
   const value = {
     userData,
     setUserData,
@@ -44,6 +58,7 @@ const UserContext = ({ children }) => {
     setSelectBackendImg,
     loading, // ✅ export loading
     refreshUser: handleCurrentUser, // optional helper to refetch user
+    GemnaiResponse,
   };
 
   return (

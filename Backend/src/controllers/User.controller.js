@@ -34,7 +34,7 @@ const updateAssistant = async (req, res) => {
         assistantName,
         assistantImg: assistantImage,
       },
-      { new: true },
+      { new: true }
     ).select("-password");
 
     res.status(200).send({
@@ -53,49 +53,52 @@ const askToAssistant = async (req, res) => {
     const user = await userModel.findById(req.userId);
     const userName = user.name;
     const assistantName = user.assistantName;
-    const result = await gemniresponse(command, userName, assistantName);
+    const result = await gemniresponse(command, assistantName, userName);
     const jsonMatch = result.match(/{[\s\S]*}/);
     if (!jsonMatch) {
       return res.status(400).send({ response: "sorry , i can't understand " });
     }
     const gemResult = JSON.parse(jsonMatch[0]);
     const type = gemResult.type;
+    console.log(gemResult);
     switch (type) {
-      case "get-date":
+      case "get_date":
         return res.send({
           type,
           userinput: gemResult.userinput,
           response: `currunt date  is ${moment().format("YYYY-MM-DD")}`,
         });
-      case "get-time":
+      case "get_time":
         return res.send({
           type,
           userinput: gemResult.userinput,
-          response: `currunt date  is ${console.log(moment().format("HH:mm:ss"))}`,
+          response: `Current time is ${moment().format("HH:mm:ss")}`,
         });
-      case "get-day":
+
+      case "get_day":
         return res.send({
           type,
           userinput: gemResult.userinput,
-          response: `currunt date  is ${console.log(moment().format("dddd"))}`,
+          response: `Today is ${moment().format("dddd")}`,
         });
-      case "get-month":
+
+      case "get_month":
         return res.send({
           type,
           userinput: gemResult.userinput,
-          response: `currunt date  is ${console.log(moment().format("MMMM"))}`,
+          response: `Current month is ${moment().format("MMMM")}`,
         });
       case "google_search":
       case "youtube_search":
       case "youtube_play":
-      case "get_time ":
-      case "get_date ":
-      case "get_day ":
-      case "get_month ":
-      case "calculator_open ":
-      case "instagram_open ":
-      case "facebook_open ":
-      case "weather_show ":
+      case "get_time":
+      case "get_date":
+      case "get_day":
+      case "get_month":
+      case "calculator_open":
+      case "instagram_open":
+      case "facebook_open":
+      case "weather_show":
         return res.send({
           type,
           userinput: gemResult.userinput,
@@ -103,12 +106,14 @@ const askToAssistant = async (req, res) => {
         });
 
       default:
-        return res
-          .status(400)
-          .send({ response: "i did not understand that command ." });
+        return res.send({
+          type: "general",
+          userinput: gemResult.userinput,
+          response: gemResult.response || "Sorry, I didn't understand.",
+        });
     }
   } catch (error) {
     console.log(error);
   }
 };
-module.exports = { getCurruntUser, updateAssistant };
+module.exports = { getCurruntUser, updateAssistant, askToAssistant };

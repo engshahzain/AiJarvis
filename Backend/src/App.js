@@ -12,7 +12,7 @@ App.use(
   cors({
     origin: "http://localhost:5173", // your frontend
     credentials: true, // VERY IMPORTANT
-  }),
+  })
 );
 
 App.use("/api/Auth", AuthRoute);
